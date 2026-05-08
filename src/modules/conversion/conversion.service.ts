@@ -49,7 +49,7 @@ export class ConversionService {
       const rates = await this.getRates();
 
       const targetRate = rates.find(
-        (r: CurrencyRate) => r.currency === dto.toCurrency,
+        (r: CurrencyRate) => r.currency.toUpperCase() === dto.toCurrency.toUpperCase(),
       );
 
       if (!targetRate) {
@@ -60,7 +60,9 @@ export class ConversionService {
       const convertedAmount = dto.amount * exchangeRate;
 
       const conversion = this.conversionRepo.create({
-        ...dto,
+        amount: dto.amount,
+        fromCurrency: dto.fromCurrency.toUpperCase(),
+        toCurrency: dto.toCurrency.toUpperCase(),
         exchangeRate,
         convertedAmount,
       });
